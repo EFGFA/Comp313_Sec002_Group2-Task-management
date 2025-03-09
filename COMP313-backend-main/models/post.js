@@ -4,10 +4,10 @@ const Schema = mongoose.Schema;
 
 const Post = new Schema(
   {
-    title: { type: string, required: true },
-    text: { type: string, required: true },
+    title: { type: String, required: true },
+    text: { type: String, required: true },
     status: {
-      type: string,
+      type: String,
       required: true,
       enum: ["in progress", "not started", "completed"],
     },
@@ -15,4 +15,4 @@ const Post = new Schema(
   { collection: "Post" },
 );
 
-export const UserModel = mongoose.model("Post", Post);
+export const PostModel = mongoose.model("Post", Post);
