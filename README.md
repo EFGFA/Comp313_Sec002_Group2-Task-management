@@ -20,20 +20,18 @@ The **Task Management System** is a web-based application designed to help small
 - **Database**: MongoDB with Mongoose ORM
 - **Authentication**: JSON Web Tokens (JWT) & bcrypt for password hashing
 - **Middleware**: Express & cookie-parser for handling requests
-- **Deployment**: DigitalOcean & Dokku (optional)
 
 ## Installation
 ### Prerequisites
 Ensure you have the following installed on your system:
 - Node.js (v14+)
 - MongoDB (local or Atlas)
-- Docker (optional for containerization)
 
 ### Steps to Install
 1. Clone the repository:
    ```sh
-   git clone https://github.com/your-repo/task-management.git
-   cd task-management
+   git clone https://github.com/EFGFA/Comp313_Project2
+   cd Comp313_Project2
    ```
 2. Install dependencies:
    ```sh
@@ -43,7 +41,7 @@ Ensure you have the following installed on your system:
    Create a `.env` file in the root directory and add the following:
    ```env
    PORT=8082
-   MONGO_URI=mongodb+srv://your-db-connection-string
+   MONGO_URI="mongodb://localhost/sof_server"
    JWT_SECRET=your-secret-key
    ```
 4. Start the server:
@@ -71,19 +69,5 @@ Ensure you have the following installed on your system:
 ## Middleware & Authentication
 The `protect` middleware ensures that only authenticated users can access certain routes. It checks for a JWT token in the **Authorization header (Bearer Token)** or **cookies**.
 
-## Deployment
-To deploy on **DigitalOcean with Dokku**:
-```sh
-git remote add dokku dokku@your-server-ip:task-management
-git push dokku main
-```
-
 ## Contributing
 Feel free to contribute to this project by submitting pull requests. Ensure your changes follow best practices and include necessary tests.
-
-## License
-This project is licensed under the MIT License.
-
-## Contact
-For any issues or suggestions, please create an issue on GitHub or contact `your-email@example.com`.
-
