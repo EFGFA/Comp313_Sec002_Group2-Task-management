@@ -1,0 +1,51 @@
+.task-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 30px;
+  border-bottom: 2px solid #b4b4b4;
+}
+
+.back-button {
+  font-size: 24px;
+  text-decoration: none;
+  color: #1d2230;
+  font-weight: bold;
+}
+
+.task-title {
+  font-size: 36px;
+  font-weight: 600;
+}
+
+.task-form {
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+  text-align: left;
+}
+
+.task-form .form-control {
+  border-radius: 20px;
+}
+
+.form-label {
+  font-weight: bold;
+}
+
+.task-button {
+  border: none;
+  padding: 12px;
+  width: 100%;
+  border-radius: 20px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.task-button:hover {
+  background-color: #0056b3;
+}
