@@ -5,21 +5,80 @@ import { UserModel } from "../models/user.js";
 // Create Task
 export const createTask = async (req, res) => {
   try {
-    const task = new PostModel(req.body);
-    await task.save();
-    res.status(201).json(task);
+      if (!req.user) {
+          return res.status(401).json({ message: "Unauthorized, no user found" });
+      }
+
+      const task = new PostModel({
+          title: req.body.title,
+          text: req.body.text,
+          status: "not started",
+          userId: req.user.id, 
+      });
+
+      await task.save();
+      res.status(201).json(task);
   } catch (error) {
-    res.status(500).json({ error: "Error creating task: " + error.message });
+      res.status(500).json({ error: "Error creating task: " + error.message });
   }
 };
 
 // Get All Tasks
 export const getAllTasks = async (req, res) => {
   try {
-    const tasks = await PostModel.find();
+    const userId = req.query.userId || req.user.id;
+
+    console.log("Fetching tasks for user:", userId);
+
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    const tasks = await PostModel.find({ userId });
+
+    console.log("Retrieved tasks:", tasks);
+
     res.status(200).json(tasks);
   } catch (error) {
+    console.error("Error fetching tasks:", error);
     res.status(500).json({ error: "Error fetching tasks: " + error.message });
+  }
+};
+
+// Get Task By ID
+export const getTaskById = async (req, res) => {
+  try {
+    const task = await PostModel.findOne({ _id: req.params.id, userId: req.user.id });
+
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+
+    res.status(200).json(task);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching task: " + error.message });
+  }
+};
+
+// Update Task (Title, Text, and Status)
+export const updateTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, text, status } = req.body;
+
+    const updatedTask = await PostModel.findOneAndUpdate(
+      { _id: id, userId: req.user.id },
+      { title, text, status },
+      { new: true }
+    );
+
+    if (!updatedTask) {
+      return res.status(404).json({ error: "Task not found or unauthorized" });
+    }
+
+    res.status(200).json(updatedTask);
+  } catch (error) {
+    res.status(500).json({ error: "Error updating task: " + error.message });
   }
 };
 
@@ -55,15 +114,24 @@ export const updateTaskStatus = async (req, res) => {
 export const deleteTask = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await PostModel.findByIdAndDelete(id);
-    if (!result) {
-      return res.status(404).json({ error: "Task not found" });
+    const userId = req.user.id;
+
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized" });
     }
+
+    const task = await PostModel.findOne({ _id: id, userId });
+    if (!task) {
+      return res.status(404).json({ error: "Task not found or unauthorized" });
+    }
+
+    await PostModel.findByIdAndDelete(id);
     res.json({ message: "Task deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: "Error deleting task: " + error.message });
   }
 };
+
 
 // Assign User to Task (Admin only)
 export const assignUserToTask = async (req, res) => {

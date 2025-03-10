@@ -9,7 +9,6 @@ import EditTaskPage from "./pages/EditTaskPage";
 
 function App() {
   const [user, setUser] = useState(() => {
-    // Try to load user from localStorage (to persist login state)
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
@@ -19,11 +18,9 @@ function App() {
 
     if (token) {
       try {
-        // Decode the token to extract user ID (optional)
         const payload = JSON.parse(atob(token.split(".")[1]));
         setUser({ id: payload.id, type: payload.type });
 
-        // Store user in localStorage so it persists after refresh
         localStorage.setItem("user", JSON.stringify({ id: payload.id, type: payload.type }));
       } catch (error) {
         console.error("Invalid token", error);
