@@ -28,19 +28,14 @@ export const getAllTasks = async (req, res) => {
   try {
     const userId = req.query.userId || req.user.id;
 
-    console.log("Fetching tasks for user:", userId);
-
     if (!userId) {
       return res.status(400).json({ error: "User ID is required" });
     }
 
     const tasks = await PostModel.find({ userId });
 
-    console.log("Retrieved tasks:", tasks);
-
     res.status(200).json(tasks);
   } catch (error) {
-    console.error("Error fetching tasks:", error);
     res.status(500).json({ error: "Error fetching tasks: " + error.message });
   }
 };
