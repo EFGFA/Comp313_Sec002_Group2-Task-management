@@ -19,7 +19,6 @@ export const registerUser = async (req, res) => {
     await user.save();
     res.status(200).json({ message: "User registered successfully!" });
   } catch (err) {
-    console.error("🔥 ERROR in registerUser:", err); // Log the error
     res.status(500).json({ err: err.message });
   }
 };
@@ -43,7 +42,6 @@ export const loginUser = async (req, res) => {
       .json({ message: "Login Successful", id: user._id, type: user.type, token });
     console.log(token);
   } catch (err) {
-    console.error("🔥 ERROR in loginUser:", err);
     res.status(500).json({ err: err.message });
   }
 };

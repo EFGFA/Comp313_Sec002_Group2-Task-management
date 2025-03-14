@@ -13,7 +13,6 @@ describe("User Controller Tests", () => {
         const req = { body: { name: "Test", email: "test@example.com", password: "test123", type: "User" } };
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
-        // Spy on UserModel.findOne and create
         const findOneSpy = jest.spyOn(UserModel, "findOne").mockResolvedValue(null);
         const createSpy = jest.spyOn(UserModel.prototype, "save").mockResolvedValue({ _id: "12345", name: "Test", email: "test@example.com" });
 
@@ -30,7 +29,7 @@ describe("User Controller Tests", () => {
         const res = {
             status: jest.fn().mockReturnThis(),
             json: jest.fn(),
-            cookie: jest.fn(), // cookie 함수를 모의합니다.
+            cookie: jest.fn(),
         };
 
         const hashedPassword = await bcrypt.hash("test123", 10);
@@ -49,7 +48,7 @@ describe("User Controller Tests", () => {
             type: user.type,
             token: "mocked-jwt-token",
         });
-        expect(res.cookie).toHaveBeenCalled(); // cookie 함수가 호출되었는지 확인합니다.
+        expect(res.cookie).toHaveBeenCalled();
         findOneSpy.mockRestore();
     });
 });
