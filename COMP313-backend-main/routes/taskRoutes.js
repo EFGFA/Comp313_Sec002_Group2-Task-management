@@ -13,11 +13,11 @@ import {
 const router = express.Router();
 
 router.route("/tasks").post(protect, createTask);
+router.route("/tasks/assign").put(protect, assignUserToTask);
 router.route("/tasks/:id").delete(protect, deleteTask);
 router.route("/tasks").get(protect, getAllTasks);
 router.route("/tasks/:id").get(protect, getTaskById);
 router.route("/tasks/:id").put(protect, updateTask);
 router.route("/tasks/:id/status").put(protect, updateTaskStatus);
-router.route("/tasks/assign").put(protect, assignUserToTask);
 
 export default router;
