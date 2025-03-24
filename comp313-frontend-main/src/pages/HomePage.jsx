@@ -6,13 +6,21 @@ import "./HomePage.css";
 function HomePage() {
   return (
     <Layout>
-      <img src="../assets/register.png" alt="Register" className="register-image" />
       <div className="button-group">
+        <img
+          src="../assets/register.png"
+          alt="Register"
+          className="register-image"
+        />
         <Link to="/register">
-          <Button variant="primary" className="m-2">Register</Button>
+          <Button variant="primary" className="m-2">
+            Register
+          </Button>
         </Link>
         <Link to="/login">
-          <Button variant="success" className="m-2">Login</Button>
+          <Button variant="success" className="m-2">
+            Login
+          </Button>
         </Link>
       </div>
     </Layout>

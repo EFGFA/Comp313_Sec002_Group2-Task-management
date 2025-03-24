@@ -11,15 +11,11 @@ export const protect = (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
-    console.log("Token received from headers:", token);
   }
 
   if (!token) {
     token = req.cookies.token;
-    console.log("Token received from cookies:", token);
   }
-
-  console.log("Token received:", token);
 
   if (!token) {
     return res.status(401).json({ message: "Unauthorized, no token provided" });

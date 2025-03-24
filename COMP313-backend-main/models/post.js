@@ -11,7 +11,12 @@ const Post = new Schema(
       required: true,
       enum: ["in progress", "not started", "completed"],
     },
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    assignedTo: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { collection: "Post" },
 );
