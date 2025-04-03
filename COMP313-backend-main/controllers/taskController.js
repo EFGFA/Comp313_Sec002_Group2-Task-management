@@ -23,23 +23,37 @@ export const createTask = async (req, res) => {
   }
 };
 
-// Get All Tasks
+// Sort function
+const sortTasks = (sortBy, sortOrder) => {
+  const validSortFields = ["title", "status"];
+  if (!validSortFields.includes(sortBy)) {
+    throw new Error("Invalid sort field");
+  }
+
+  return { [sortBy]: sortOrder };
+};
+
+// Get All Tasks with Sorting
 export const getAllTasks = async (req, res) => {
   try {
     const userId = req.query.userId || req.user.id;
+    const sortBy = req.query.sortBy || null;
+    const sortOrder = req.query.sortOrder === "desc" ? -1 : 1;
 
-    if (!userId) {
-      return res.status(400).json({ error: "User ID is required" });
+
+    let tasks;
+    if (!sortBy) {
+      tasks = await PostModel.find({ userId });
+    } else {
+      const sortCriteria = sortTasks(sortBy, sortOrder);
+      tasks = await PostModel.find({ userId }).sort(sortCriteria);
     }
-
-    const tasks = await PostModel.find({ userId });
 
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ error: "Error fetching tasks: " + error.message });
   }
 };
-
 // Get Task By ID
 export const getTaskById = async (req, res) => {
   try {
