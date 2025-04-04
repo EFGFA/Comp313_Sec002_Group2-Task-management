@@ -31,12 +31,21 @@ export const getAllTasks = async (req, res) => {
     if (!userId) {
       return res.status(400).json({ error: "User ID is required" });
     }
+
+    const sortBy = req.query.sortBy;
+    const sortOrder = req.query.sortOrder === "desc" ? -1 : 1;
+
     let tasks;
 
     if (req.user.type === "Admin" || req.user.type === "User") {
       tasks = await PostModel.find({ userId });
     } else {
       tasks = await PostModel.find({ assignedTo: userId });
+    }
+
+    const validSortFields = ["title", "status", "createdAt"];
+    if (sortBy && validSortFields.includes(sortBy)) {
+      tasks = tasks.sort({ [sortBy]: sortOrder });
     }
 
     res.status(200).json(tasks);
