@@ -37,14 +37,23 @@ export const loginUser = async (req, res) => {
       { expiresIn: "1h" },
     );
     res.cookie("token", token, { httpOnly: true, secure: false });
-    res
-      .status(200)
-      .json({
-        message: "Login Successful",
-        id: user._id,
-        type: user.type,
-        token,
-      });
+    res.status(200).json({
+      message: "Login Successful",
+      id: user._id,
+      type: user.type,
+      token,
+    });
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
+};
+
+export const getAllEmplyee = async (req, res) => {
+  try {
+    const users = await UserModel.find({ type: "Employee" });
+    if (!users) return res.status(404).json({ message: "No Employee Found!" });
+
+    res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ err: err.message });
   }
