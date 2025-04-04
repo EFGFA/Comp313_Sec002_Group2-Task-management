@@ -35,19 +35,20 @@ export const getAllTasks = async (req, res) => {
     const sortBy = req.query.sortBy;
     const sortOrder = req.query.sortOrder === "desc" ? -1 : 1;
 
-    let tasks;
+    let query;
 
     if (req.user.type === "Admin" || req.user.type === "User") {
-      tasks = await PostModel.find({ userId });
+      query = PostModel.find({ userId });
     } else {
-      tasks = await PostModel.find({ assignedTo: userId });
+      query = PostModel.find({ assignedTo: userId });
     }
 
     const validSortFields = ["title", "status", "createdAt"];
     if (sortBy && validSortFields.includes(sortBy)) {
-      tasks = tasks.sort({ [sortBy]: sortOrder });
+      query = query.sort({ [sortBy]: sortOrder });
     }
 
+    const tasks = await query;
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ error: "Error fetching tasks: " + error.message });
