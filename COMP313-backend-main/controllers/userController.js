@@ -39,10 +39,13 @@ export const loginUser = async (req, res) => {
     res.cookie("token", token, { httpOnly: true, secure: false });
     res
       .status(200)
-      .json({ message: "Login Successful", id: user._id, type: user.type, token });
-    console.log(token);
+      .json({
+        message: "Login Successful",
+        id: user._id,
+        type: user.type,
+        token,
+      });
   } catch (err) {
     res.status(500).json({ err: err.message });
   }
 };
-
