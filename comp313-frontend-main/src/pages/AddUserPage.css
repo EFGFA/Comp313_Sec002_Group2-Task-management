@@ -1,0 +1,65 @@
+.add-user-header {
+    display: flex;
+    justify-content: space-between; /* Distribute space between items */
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #b4b4b4; /* Light border */
+  }
+  
+  .add-user-title {
+    font-size: 36px;
+    font-weight: 600;
+    margin: 0;
+    text-align: right;
+  }
+  
+  .back-button {
+    font-size: 24px;
+    text-decoration: none;
+    color: #1d2230;
+    font-weight: bold;
+  }
+  
+  /* Form container for adding user */
+  .add-user-form {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    text-align: left;
+    padding: 20px;
+  }
+  
+  /* Form Group Styling */
+  .add-user-form .form-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  /* Input fields */
+  .add-user-form .form-control {
+    border-radius: 20px;
+    padding: 12px;
+    margin-bottom: 15px; /* Space between fields */
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  
+  /* Button styling */
+  .add-user-button {
+    border: none;
+    padding: 12px;
+    width: 100%;
+    border-radius: 20px;
+    background-color: #007bff; /* Blue color */
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .add-user-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  

@@ -1,0 +1,39 @@
+.login-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #e0e0e0; 
+}
+
+.back-button {
+    font-size: 24px;
+    text-decoration: none;
+    color: #1d2230;
+    font-weight: bold;
+}
+
+.login-title {
+    font-size: 36px;
+    font-weight: 600;
+}
+
+.login-form {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    text-align: left;
+}
+
+.login-form .form-control {
+    border-radius: 20px;
+}
+
+.login-button {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    width: 100%;
+}
