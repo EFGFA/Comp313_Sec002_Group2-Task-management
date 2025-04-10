@@ -1,0 +1,51 @@
+.register-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #b4b4b4;
+  }
+  
+  .back-button {
+    font-size: 24px;
+    text-decoration: none;
+    color: #1d2230;
+    font-weight: bold;
+  }
+  
+  .register-title {
+    font-size: 36px;
+    font-weight: 600;
+  }
+  
+  .register-form {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    text-align: left;
+  }
+  
+  .register-form .form-control {
+    border-radius: 20px;
+  }
+  
+  .user-type {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .radio-group {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .register-button {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    width: 100%;
+  }
+  

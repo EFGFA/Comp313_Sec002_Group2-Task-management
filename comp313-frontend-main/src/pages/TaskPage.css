@@ -1,0 +1,124 @@
+.task-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #333333;
+}
+
+.task-title {
+    font-size: 36px;
+    font-weight: 600;
+    margin-right: 40px;
+}
+
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 320px;
+    margin-left: auto;
+}
+
+.search-bar {
+    padding: 8px 10px;
+    padding-right: 35px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.search-icon {
+    position: absolute;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.add-task-button,.add-employee-button {
+    background-color: #8a8fc5;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+}
+
+
+
+.task-table {
+    margin-top: 20px;
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-weight: bold;
+}
+
+.status-badge.in-progress {
+    background-color: #ffcc00;
+    color: #000;
+}
+
+.status-badge.not-started {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+.status-badge.completed {
+    background-color: #28a745;
+    color: white;
+}
+
+.action-cell {
+    display: flex;
+    justify-content: center; 
+    gap: 5px; 
+}
+
+
+.action-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.action-icon:hover {
+    transform: scale(1.2);
+}
+
+.icon-spacing {
+    width: 50px;
+}
+
+.white-box {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 1050px;
+    height: 700px;
+    position: relative;
+    top: -150px;
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items: center;
+  }
+
+  .sort-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  
+  .sort-icon:hover {
+    transform: scale(1.2);
+  }
+  
