@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import "./LoginPage.css";
 
 function LoginPage({ setUser }) {
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({ email: "", password: "", type: "User" });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -18,20 +18,19 @@ function LoginPage({ setUser }) {
     e.preventDefault();
     try {
       const response = await loginUser(formData);
-  
+
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data));
-  
+
       setUser(response.data);
       alert("Login successful!");
       navigate("/tasks");
     } catch (error) {
       console.error("Login failed:", error);
-      alert("Invalid email or password. Please try again.");
+      alert(error.response?.data?.message || "Invalid credentials.");
     }
   };
-  
-  
+
   return (
     <Layout>
       <div className="login-header">
@@ -46,6 +45,14 @@ function LoginPage({ setUser }) {
         <Form.Group className="mb-3">
           <Form.Label className="form-label">Password</Form.Label>
           <Form.Control type="password" name="password" placeholder="Enter your password" onChange={handleChange} required />
+        </Form.Group>
+        <Form.Group className="mb-3 user-type">
+          <Form.Label className="form-label">Login as</Form.Label>
+          <div className="radio-group">
+            <Form.Check type="radio" label="Admin" name="type" value="Admin" onChange={handleChange} />
+            <Form.Check type="radio" label="Employee" name="type" value="Employee" onChange={handleChange} />
+            <Form.Check type="radio" label="Individual" name="type" value="User" defaultChecked onChange={handleChange} />
+          </div>
         </Form.Group>
         <Button type="submit" className="login-button">Login</Button>
       </Form>

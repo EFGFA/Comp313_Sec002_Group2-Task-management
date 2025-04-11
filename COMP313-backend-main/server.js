@@ -24,6 +24,7 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use("/api", userRoutes);
 app.use("/api", taskRoutes);
 
+
 const PORT = process.env.PORT || 8082;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 

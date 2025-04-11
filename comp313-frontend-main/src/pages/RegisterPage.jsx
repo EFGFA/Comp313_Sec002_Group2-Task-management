@@ -18,11 +18,11 @@ function RegisterPage() {
     e.preventDefault();
     try {
       await registerUser(formData);
-      alert("Registration successful. Please log in.")
+      alert("Registration successful. Please log in.");
       navigate("/login");
     } catch (error) {
       console.error("Registration failed:", error);
-      alert("Registration failed. Please try again.")
+      alert("Registration failed. Please try again.");
     }
   };
 
@@ -48,8 +48,8 @@ function RegisterPage() {
         <Form.Group className="mb-3 user-type">
           <Form.Label className="form-label">User Type</Form.Label>
           <div className="radio-group">
-            {/* <Form.Check type="radio" label="Admin" name="type" value="Admin" onChange={handleChange} /> */}
-            <Form.Check type="radio" label="User" name="type" value="User" defaultChecked onChange={handleChange} />
+            <Form.Check type="radio" label="Admin" name="type" value="Admin" onChange={handleChange} />
+            <Form.Check type="radio" label="Individual" name="type" value="User" defaultChecked onChange={handleChange} />
           </div>
         </Form.Group>
         <Button type="submit" className="register-button">Register</Button>

@@ -6,8 +6,10 @@ import LoginPage from "./pages/LoginPage";
 import TaskPage from "./pages/TaskPage";
 import AddTaskPage from "./pages/AddTaskPage";
 import EditTaskPage from "./pages/EditTaskPage";
+import AddUserPage from "./pages/AddUserPage";
 
 function App() {
+
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
@@ -40,6 +42,7 @@ function App() {
         <Route path="/tasks" element={user ? <TaskPage user={user} /> : <Navigate to="/login" />} />
         <Route path="/tasks/add" element={user ? <AddTaskPage /> : <Navigate to="/login" />} />
         <Route path="/tasks/edit/:id" element={user ? <EditTaskPage /> : <Navigate to="/login" />} />
+        <Route path="/addemmployee" element={<AddUserPage />} />
       </Routes>
     </Router>
   );

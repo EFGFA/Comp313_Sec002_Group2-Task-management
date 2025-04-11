@@ -25,17 +25,28 @@ export const registerUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, type } = req.body; // Add type here
     const user = await UserModel.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid Credential!" });
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
+
+    if (!user) {
       return res.status(400).json({ message: "Invalid Credential!" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid Credential!" });
+    }
+
+    if (user.type !== type) {
+      return res.status(400).json({ message: "User type mismatch!" });
+    }
+
     const token = jwt.sign(
       { id: user._id, type: user.type },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" },
+      { expiresIn: "1h" }
     );
+
     res.cookie("token", token, { httpOnly: true, secure: false });
     res.status(200).json({
       message: "Login Successful",
@@ -48,7 +59,8 @@ export const loginUser = async (req, res) => {
   }
 };
 
-export const getAllEmplyee = async (req, res) => {
+
+export const getAllEmployee = async (req, res) => {
   try {
     const users = await UserModel.find({ type: "Employee" });
     if (!users) return res.status(404).json({ message: "No Employee Found!" });
@@ -58,3 +70,17 @@ export const getAllEmplyee = async (req, res) => {
     res.status(500).json({ err: err.message });
   }
 };
+// userController.js
+
+export const getUserInfo = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.user.id); // Ensure 'req.user.id' is set by the 'protect' middleware
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const { name, email, type } = user;
+    res.status(200).json({ name, email, type });
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
+};
+

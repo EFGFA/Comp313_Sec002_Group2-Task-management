@@ -7,10 +7,33 @@
     border-bottom: 2px solid #333333;
 }
 
+.task-heading {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: left;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
 .task-title {
     font-size: 36px;
     font-weight: 600;
     margin-right: 40px;
+}
+.task-table th, .task-table td, .employee-table th, .employee-table td {
+    text-align: center;
+    vertical-align: middle;
+}
+.employee-table th:first-child, .employee-table td:first-child {
+    width: 20%; 
+}
+  
+.employee-table th:nth-child(2), .employee-table td:nth-child(2) {
+    width: 60%; 
+}
+  
+.employee-table th:last-child, .employee-table td:last-child {
+    width: 20%; 
 }
 
 .search-container {
@@ -37,7 +60,7 @@
     cursor: pointer;
 }
 
-.add-task-button {
+.add-task-button,.add-employee-button {
     background-color: #8a8fc5;
     border: none;
     padding: 10px 20px;
@@ -46,6 +69,43 @@
 
 .task-table {
     margin-top: 20px;
+}
+
+.status-select {
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    padding: 8px;
+    width: 150px;
+    transition: all 0.3s ease;
+}
+
+.status-select:focus {
+    background-color: white; 
+    border-color: #888;
+    outline: none; 
+}
+
+.status-select option {
+    background-color: white;
+    color: black;
+    padding: 10px;
+    border: none;
+}
+
+.status-select.not-started {
+    background-color: #ff4d4d;
+    color: white;
+}
+  
+.status-select.in-progress {
+    background-color: #ffcc00;
+    color: black;
+}
+  
+.status-select.completed {
+    background-color: #28a745;
+    color: white;
 }
 
 .status-badge {
@@ -106,3 +166,19 @@
     justify-content:flex-start;
     align-items: center;
   }
+
+  .sort-icon {
+    width: 10px;
+    height: 12px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  
+  .sort-icon:hover {
+    transform: scale(1.2);
+  }
+
+  
+  
