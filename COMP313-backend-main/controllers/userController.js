@@ -62,23 +62,23 @@ export const loginUser = async (req, res) => {
 
 export const getAllEmployee = async (req, res) => {
   try {
-    const users = await UserModel.find({ type: "Employee" });
-    if (!users) return res.status(404).json({ message: "No Employee Found!" });
+    if (!req.user || req.user.type !== 'Admin') {
+      return res.status(403).json({ message: "Forbidden: Admin access required" });
+  }
+  const users = await UserModel.find({ type: "Employee" }).select('-password');
 
-    res.status(200).json(users);
+  res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ err: err.message });
   }
 };
-// userController.js
 
 export const getUserInfo = async (req, res) => {
   try {
-    const user = await UserModel.findById(req.user.id); // Ensure 'req.user.id' is set by the 'protect' middleware
+    const user = await UserModel.findById(req.user.id).select('-password').lean();; // Ensure 'req.user.id' is set by the 'protect' middleware
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const { name, email, type } = user;
-    res.status(200).json({ name, email, type });
+    res.status(200).json(user);
   } catch (err) {
     res.status(500).json({ err: err.message });
   }
