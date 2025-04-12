@@ -19,3 +19,9 @@
   justify-content: center;
   height: 100%;
 }
+.home-box {
+  width: 400px;
+  min-height: 250px;
+  height: auto;
+  padding-top: 300px;
+}

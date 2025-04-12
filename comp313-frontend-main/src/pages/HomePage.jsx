@@ -6,6 +6,7 @@ import "./HomePage.css";
 function HomePage() {
   return (
     <Layout>
+      <div className="home-box">
       <div className="button-group">
         <img
           src="../assets/register.png"
@@ -22,6 +23,7 @@ function HomePage() {
             Login
           </Button>
         </Link>
+      </div>
       </div>
     </Layout>
   );
