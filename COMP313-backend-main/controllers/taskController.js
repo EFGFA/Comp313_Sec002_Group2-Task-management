@@ -9,14 +9,20 @@ export const createTask = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized, no user found" });
     }
 
+    const { title, text, status, assignedTo } = req.body;
+
+    const validAssignedTo = Array.isArray(assignedTo) ? assignedTo : [];
+
     const task = new PostModel({
-      title: req.body.title,
-      text: req.body.text,
-      status: "not started",
+      title: title,
+      text: text,
+      status: status || "not started", 
       userId: req.user.id,
+      assignedTo: validAssignedTo,
     });
 
     await task.save();
+    const populatedTask = await PostModel.findById(task._id).populate('assignedTo', 'name email'); 
     res.status(201).json(task);
   } catch (error) {
     res.status(500).json({ error: "Error creating task: " + error.message });
@@ -77,13 +83,30 @@ export const getTaskById = async (req, res) => {
 export const updateTask = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, text, status } = req.body;
+    const { title, text, status, assignedTo } = req.body;
 
-    const updatedTask = await PostModel.findOneAndUpdate(
-      { _id: id, userId: req.user.id },
-      { title, text, status },
-      { new: true },
-    );
+    let taskToUpdateQuery;
+    const updateFields = {};
+    if (title !== undefined) updateFields.title = title;
+    if (text !== undefined) updateFields.text = text;
+    if (status !== undefined) updateFields.status = status;
+    if (assignedTo !== undefined) {
+      updateFields.assignedTo = Array.isArray(assignedTo) ? assignedTo : [];
+    }
+    
+    if (req.user && req.user.type === 'Admin') {
+      taskToUpdateQuery = PostModel.findByIdAndUpdate(id, updateFields, { new: true });
+    } else if (req.user) {
+      taskToUpdateQuery = PostModel.findOneAndUpdate(
+        { _id: id, userId: req.user.id },
+        updateFields,
+        { new: true }
+      );
+    } else {
+       return res.status(401).json({ error: "Authentication required" });
+    }
+
+    const updatedTask = await taskToUpdateQuery.populate('assignedTo', 'name email');
 
     if (!updatedTask) {
       return res.status(404).json({ error: "Task not found or unauthorized" });
@@ -91,6 +114,7 @@ export const updateTask = async (req, res) => {
 
     res.status(200).json(updatedTask);
   } catch (error) {
+    console.error("Error updating task:", error);
     res.status(500).json({ error: "Error updating task: " + error.message });
   }
 };
@@ -142,36 +166,5 @@ export const deleteTask = async (req, res) => {
     res.json({ message: "Task deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: "Error deleting task: " + error.message });
-  }
-};
-
-// Assign User to Task (Admin only)
-export const assignUserToTask = async (req, res) => {
-  try {
-    const { taskId, userId } = req.body; // Task ID and User ID from the body
-
-    // Check if the user exists
-    const user = await UserModel.findById(userId);
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    // Check if the task exists
-    const task = await PostModel.findById(taskId);
-    if (!task) {
-      return res.status(404).json({ error: "Task not found" });
-    }
-
-    // Assign the user to the task
-    task.assignedTo.push(user._id);
-    await task.save();
-
-    res
-      .status(200)
-      .json({ message: "User assigned to task successfully", task });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Error assigning user to task: " + error.message });
   }
 };
