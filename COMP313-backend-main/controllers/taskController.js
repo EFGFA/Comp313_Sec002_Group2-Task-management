@@ -43,7 +43,7 @@ export const getAllTasks = async (req, res) => {
       query = PostModel.find({ assignedTo: userId });
     }
 
-    const validSortFields = ["title", "status", "createdAt"];
+    const validSortFields = ["title", "text", "assignedTo", "status", "createdAt"];
     if (sortBy && validSortFields.includes(sortBy)) {
       query = query.sort({ [sortBy]: sortOrder });
     }
