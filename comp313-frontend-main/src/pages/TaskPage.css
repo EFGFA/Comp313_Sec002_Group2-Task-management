@@ -20,21 +20,6 @@
     font-weight: 600;
     margin-right: 40px;
 }
-.task-table th, .task-table td, .employee-table th, .employee-table td {
-    text-align: center;
-    vertical-align: middle;
-}
-.employee-table th:first-child, .employee-table td:first-child {
-    width: 20%; 
-}
-  
-.employee-table th:nth-child(2), .employee-table td:nth-child(2) {
-    width: 60%; 
-}
-  
-.employee-table th:last-child, .employee-table td:last-child {
-    width: 20%; 
-}
 
 .search-container {
     position: relative;
@@ -69,7 +54,68 @@
 
 .task-table {
     margin-top: 20px;
+    table-layout: fixed;
+    width: 100%;
 }
+
+.task-tables-container {
+    display: flex;
+    flex-direction: column; 
+    flex-grow: 1;         
+    width: 100%;          
+    min-height: 0;        
+}
+
+.task-section {
+    flex: 1;            
+    min-height: 0;   
+    display: flex;
+    flex-direction: column; 
+    overflow: hidden;     
+}
+
+.task-section .task-heading {
+    font-size: 25px;     
+    font-weight: bold;
+    text-align: center;
+    flex-shrink: 0;      
+}
+  
+.task-section:last-child {
+    margin-bottom: 0;
+}
+
+.table-wrapper {
+    flex-grow: 1;        
+    overflow-y: auto;    
+    min-height: 0;       
+    border: 1px solid #eee; 
+  }
+
+.task-table th, .task-table td, .employee-table th, .employee-table td {
+    text-align: center;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-table .col-title,
+.admin-table .col-text,
+.admin-table .col-assigned,
+.admin-table .col-status,
+.admin-table .col-actions {
+  width: 20%;
+}
+
+.individual-table .col-title { width: 20%; }
+.individual-table .col-text { width: 40%; }
+.individual-table .col-status { width: 20%; }
+.individual-table .col-actions { width: 20%; }
+
+.employee-table .col-title { width: 20%; }
+.employee-table .col-text { width: 60%; }
+.employee-table .col-status { width: 20%; }
 
 .status-select {
     background-color: #f8f9fa;
@@ -129,18 +175,13 @@
     color: white;
 }
 
-.action-cell {
-    display: flex;
-    justify-content: center; 
-    gap: 5px; 
-}
-
-
 .action-icon {
     width: 20px;
     height: 20px;
     cursor: pointer;
     transition: transform 0.2s ease-in-out;
+    vertical-align: middle;
+    margin: 0 25px;
 }
 
 .action-icon:hover {
@@ -158,13 +199,14 @@
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     width: 1050px;
-    height: 700px;
+    min-height: 825px;
     position: relative;
     top: -150px;
     display: flex;
     flex-direction: column;
     justify-content:flex-start;
     align-items: center;
+    overflow: hidden;
   }
 
   .sort-icon {

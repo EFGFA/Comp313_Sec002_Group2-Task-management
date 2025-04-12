@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 import Layout from "../components/Layout";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext"; 
 import "./LoginPage.css";
 
 function LoginPage({ setUser }) {
   const [formData, setFormData] = useState({ email: "", password: "", type: "User" });
   const navigate = useNavigate();
+  const { setAuthData } = useAuth();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,10 +21,8 @@ function LoginPage({ setUser }) {
     try {
       const response = await loginUser(formData);
 
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data));
+      setAuthData(response.data.token, response.data); 
 
-      setUser(response.data);
       alert("Login successful!");
       navigate("/tasks");
     } catch (error) {

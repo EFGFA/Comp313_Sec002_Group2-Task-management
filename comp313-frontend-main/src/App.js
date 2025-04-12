@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { AuthProvider, useAuth } from "./context/AuthContext"; 
 import HomePage from "./pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
@@ -8,43 +8,36 @@ import AddTaskPage from "./pages/AddTaskPage";
 import EditTaskPage from "./pages/EditTaskPage";
 import AddUserPage from "./pages/AddUserPage";
 
-function App() {
+function ProtectedRoute({ children }) {
+  const { token } = useAuth(); 
+  return token ? children : <Navigate to="/login" replace />;
+}
 
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        setUser({ id: payload.id, type: payload.type });
-
-        localStorage.setItem("user", JSON.stringify({ id: payload.id, type: payload.type }));
-      } catch (error) {
-        console.error("Invalid token", error);
-        setUser(null);
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-      }
-    }
-  }, []);
+function AppContent() {
 
   return (
-    <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/login" element={<LoginPage setUser={setUser} />} />
-        <Route path="/tasks" element={user ? <TaskPage user={user} /> : <Navigate to="/login" />} />
-        <Route path="/tasks/add" element={user ? <AddTaskPage /> : <Navigate to="/login" />} />
-        <Route path="/tasks/edit/:id" element={user ? <EditTaskPage /> : <Navigate to="/login" />} />
-        <Route path="/addemmployee" element={<AddUserPage />} />
+        <Route path="/login" element={<LoginPage />} /> 
+
+        <Route path="/tasks" element={<ProtectedRoute><TaskPage /></ProtectedRoute>} />
+        <Route path="/tasks/add" element={<ProtectedRoute><AddTaskPage /></ProtectedRoute>} />
+        <Route path="/tasks/edit/:id" element={<ProtectedRoute><EditTaskPage /></ProtectedRoute>} />
+        <Route path="/addemmployee" element={<ProtectedRoute><AddUserPage /></ProtectedRoute>} /> 
+
       </Routes>
-    </Router>
+  );
+}
+
+function App() {
+
+  return (
+    <AuthProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </AuthProvider>
   );
 }
 
