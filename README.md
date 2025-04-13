@@ -68,19 +68,20 @@ The backend API base path is `/api`.
 
 ### Users
 
-| Method | Endpoint | Description   | Notes                       |
-| :----- | :------- | :------------ | :-------------------------- |
-| GET    | `/users` | Get all users | Auth required; Likely Admin |
+| Method | Endpoint     | Description   | Notes                       |
+| :----- | :----------- | :------------ | :-------------------------- |
+| GET    | `/employees` | Get all users | Auth required; Likely Admin |
 
 ### Tasks
 
-| Method | Endpoint     | Description                  | Notes                                       |
-| :----- | :----------- | :--------------------------- | :------------------------------------------ |
-| POST   | `/tasks`     | Create a new task            | Auth required                               |
-| GET    | `/tasks`     | Get all tasks                | Auth required                               |
-| GET    | `/tasks/:id` | Get a specific task by ID    | Auth required                               |
-| PUT    | `/tasks/:id` | Update a specific task by ID | Auth required; Used for status updates etc. |
-| DELETE | `/tasks/:id` | Delete a specific task by ID | Auth required                               |
+| Method | Endpoint            | Description                  | Notes                                       |
+| :----- | :------------------ | :--------------------------- | :------------------------------------------ |
+| POST   | `/tasks`            | Create a new task            | Auth required                               |
+| GET    | `/tasks`            | Get all tasks                | Auth required                               |
+| GET    | `/tasks/:id`        | Get a specific task by ID    | Auth required                               |
+| PUT    | `/tasks/:id`        | Update a specific task by ID | Auth required;                              |
+| PUT    | `/tasks/:id/status` | Update a specific task by ID | Auth required; Used for status updates etc. |
+| DELETE | `/tasks/:id`        | Delete a specific task by ID | Auth required                               |
 
 _Note: Task assignment seems handled via the `assignedUser` field during task creation or update (PUT `/tasks/:id`), rather than a dedicated assignment endpoint found in the current routes._
 
