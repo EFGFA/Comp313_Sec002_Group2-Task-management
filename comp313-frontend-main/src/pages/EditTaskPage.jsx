@@ -47,7 +47,9 @@ function EditTaskPage({ user }) {
         title: taskResponse.data.title,
         text: taskResponse.data.text,
         status: taskResponse.data.status,
-        assignedTo: taskResponse.data.assignedTo || [],
+        assignedTo: Array.isArray(taskResponse.data.assignedTo)
+                    ? taskResponse.data.assignedTo.map(emp => emp._id)
+                    : [],
       });
       setEmployees(employeeResponse.data);
       setUserRole(userInfoResponse.data.type);

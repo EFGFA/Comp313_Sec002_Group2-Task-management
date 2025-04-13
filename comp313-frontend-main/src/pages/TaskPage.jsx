@@ -16,35 +16,51 @@ function TaskPage() {
 
   const userRole = user ? user.type : null;
 
-  const fetchTasksAndEmployees = async () => {
-    try {
+const fetchTasksAndEmployees = async () => {
+  try {
       if (!token) {
-        console.error("No token found, user may not be authenticated.");
-        return;
+          console.error("No token found, user may not be authenticated.");
+          setTasks([]); 
+          setEmployees([]);
+          return;
       }
 
-      const [tasksResponse, userInfoResponse, employeeResponse] = await Promise.all([
-        axios.get(`http://localhost:8082/api/tasks?sortBy=${sortBy}&sortOrder=${sortOrder}`, {
-          headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,
-        }),
-        axios.get("http://localhost:8082/api/user-info", {
-          headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,
-        }),
-        axios.get("http://localhost:8082/api/employees", {
-          headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,
-        }),
+      const [tasksResponse, userInfoResponse] = await Promise.all([
+          axios.get(`http://localhost:8082/api/tasks?sortBy=<span class="math-inline">\{sortBy\}&sortOrder\=</span>{sortOrder}`, {
+              headers: { Authorization: `Bearer ${token}` },
+              withCredentials: true,
+          }),
+          axios.get("http://localhost:8082/api/user-info", {
+              headers: { Authorization: `Bearer ${token}` },
+              withCredentials: true,
+          })
       ]);
 
       setTasks(tasksResponse.data);
-      setEmployees(employeeResponse.data);
-    } catch (error) {
+
+      const currentUserRole = userInfoResponse.data.type;
+
+      if (currentUserRole === 'Admin') {
+          try {
+              const employeeResponse = await axios.get("http://localhost:8082/api/employees", {
+                  headers: { Authorization: `Bearer ${token}` },
+                  withCredentials: true,
+              });
+              setEmployees(employeeResponse.data);
+          } catch (empError) {
+              console.error("Error fetching employees:", empError.response?.data || empError.message);
+              setEmployees([]);
+          }
+      } else {
+          setEmployees([]);
+      }
+
+  } catch (error) {
       console.error("Error fetching tasks or user info:", error.response?.data || error.message);
+      setTasks([]);
       setEmployees([]);
-    }
-  };
+  }
+};
 
   useEffect(() => {
     if (token) { 
@@ -198,7 +214,7 @@ function TaskPage() {
                   <td className="col-text">{task.text}</td>
                   {userRole === "Admin" && 
                   <td className="col-assigned">{task.assignedTo && task.assignedTo.length > 0
-                        ? task.assignedTo.map(employeeId => getEmployeeNameById(employeeId)).join(', ')
+                        ? task.assignedTo.map(assignedUser  => getEmployeeNameById(assignedUser._id)).join(', ')
                         : "Not Assigned"}
                   </td>}
                   <td className="col-status">
@@ -277,9 +293,9 @@ function TaskPage() {
                     <td className="col-text">{task.text}</td>
                     {userRole === "Admin" && 
                     <td className="col-assigned">{task.assignedTo && task.assignedTo.length > 0
-                          ? task.assignedTo.map(employeeId => getEmployeeNameById(employeeId)).join(', ')
-                          : "Not Assigned"}
-                    </td>}
+                      ? task.assignedTo.map(assignedUser  => getEmployeeNameById(assignedUser._id)).join(', ')
+                      : "Not Assigned"}
+                </td>}
                     <td>
                       <span className={`status-badge ${task.status.replace(" ", "-").toLowerCase()}`}>
                         {task.status.toUpperCase()}

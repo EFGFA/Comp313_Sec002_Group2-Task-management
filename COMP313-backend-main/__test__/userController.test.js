@@ -122,12 +122,6 @@ describe("User API Routes Integration Tests", () => {
     expect(res.body).toHaveProperty("message", "User type mismatch!");
   });
 
-  /*
-  test(`POST /api/register - Admin add employee successfully (if register allows)`, async () => {
-     // ... Test logic for admin using register route ...
-  });
-  */
-
   test(`GET ${EMPLOYEES_PATH} - Admin get all employees successfully`, async () => {
       expect(adminUserToken).toBeDefined();
       const res = await request(app)
