@@ -26,7 +26,7 @@ const fetchTasksAndEmployees = async () => {
       }
 
       const [tasksResponse, userInfoResponse] = await Promise.all([
-          axios.get(`http://localhost:8082/api/tasks?sortBy=<span class="math-inline">\{sortBy\}&sortOrder\=</span>{sortOrder}`, {
+          axios.get(`http://localhost:8082/api/tasks?sortBy=${sortBy}&sortOrder=${sortOrder}`, {
               headers: { Authorization: `Bearer ${token}` },
               withCredentials: true,
           }),

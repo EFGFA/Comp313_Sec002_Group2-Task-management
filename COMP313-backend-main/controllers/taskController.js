@@ -78,7 +78,7 @@ export const getAllTasks = async (req, res) => {
                         .populate('userId', 'name email type')
                         .populate('assignedTo', 'name email type'); 
 
-    const validSortFields = ["title", "text", "status", "createdAt"];
+    const validSortFields = ["title", "text", "status", "assignedTo", "createdAt"];
     if (sortBy && validSortFields.includes(sortBy)) {
       query = query.sort({ [sortBy]: sortOrder });
     } else {

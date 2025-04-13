@@ -23,44 +23,67 @@ function EditTaskPage({ user }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!token) {
-          console.error("Token not found");
-          return;
+      if (!token || !id) {
+        console.error("Token or Task ID is missing.");
+        setFormData({ title: "", text: "", status: "not started", assignedTo: [] });
+        setEmployees([]);
+        setUserRole("");
+        return;
       }
-    try {
-      const [taskResponse, employeeResponse, userInfoResponse] = await Promise.all([
-        axios.get(`http://localhost:8082/api/tasks/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true
-        }),
-        axios.get("http://localhost:8082/api/employees", {
-          headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,
-        }),
-         axios.get("http://localhost:8082/api/user-info", {
-          headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,
-        }),
-      ]);
 
-      setFormData({
-        title: taskResponse.data.title,
-        text: taskResponse.data.text,
-        status: taskResponse.data.status,
-        assignedTo: Array.isArray(taskResponse.data.assignedTo)
-                    ? taskResponse.data.assignedTo.map(emp => emp._id)
-                    : [],
-      });
-      setEmployees(employeeResponse.data);
-      setUserRole(userInfoResponse.data.type);
+      try {
+        console.log("Fetching task and user info...");
+        const [taskResponse, userInfoResponse] = await Promise.all([
+          axios.get(`http://localhost:8082/api/tasks/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true 
+          }),
+          axios.get("http://localhost:8082/api/user-info", {
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true,
+          }),
+        ]);
+        console.log("Task data received:", taskResponse.data);
+        console.log("User info received:", userInfoResponse.data);
+        setFormData({
+          title: taskResponse.data.title || "",
+          text: taskResponse.data.text || "",
+          status: taskResponse.data.status || "not started",
+          assignedTo: Array.isArray(taskResponse.data.assignedTo)
+                      ? taskResponse.data.assignedTo.map(emp => emp._id)
+                      : [],
+        });
+        const role = userInfoResponse.data.type;
+        setUserRole(role);
 
-    } catch (error) {
-      console.error("Failed to fetch initial data for edit:", error);
-    }
-  };
+        if (role === 'Admin') {
+          try {
+            console.log("Fetching employees as Admin...");
+            const employeeResponse = await axios.get("http://localhost:8082/api/employees", {
+              headers: { Authorization: `Bearer ${token}` },
+              withCredentials: true, 
+            });
+            console.log("Employees received:", employeeResponse.data);
+            setEmployees(employeeResponse.data);
+          } catch (empError) {
+            console.error("Failed to fetch employees even as Admin:", empError.response?.data || empError.message);
+            setEmployees([]); 
+          }
+        } else {
+          setEmployees([]);
+        }
 
-  fetchData();
-}, [id, token]);
+      } catch (error) {
+        console.error("Failed to fetch initial task/user data:", error.response?.data || error.message);
+        alert(`Failed to load task data: ${error.response?.data?.error || error.message}`);
+        setFormData({ title: "", text: "", status: "not started", assignedTo: [] });
+        setEmployees([]);
+        setUserRole("");
+      }
+    };
+
+    fetchData();
+  }, [id, token, navigate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
