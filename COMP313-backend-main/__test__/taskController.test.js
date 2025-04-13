@@ -209,18 +209,22 @@ describe("Task API Routes Integration Tests", () => {
         expect(res.body.assignedTo.some(user => user._id === businessUserId)).toBe(true);
     });
 
-    test(`GET ${TASKS_PATH} - Retrieve all tasks`, async () => {
-        expect(adminUserToken).toBeDefined();
-        const res = await request(app).get(TASKS_PATH).set("Authorization", `Bearer ${adminUserToken}`);
-        expect(res.statusCode).toBe(200);
-        expect(Array.isArray(res.body)).toBe(true);
-        expect(res.body.some(task => task._id === taskByIndividualId)).toBe(true);
-        expect(res.body.some(task => task._id === taskByAdminId)).toBe(true);
-        expect(res.body.some(task => task._id === taskAssignedToBusinessId)).toBe(true);
-        if (taskCreatedByAdminForAssignment) {
-            expect(res.body.some(task => task._id === taskCreatedByAdminForAssignment)).toBe(true);
-        }
-    });
+    test(`GET ${TASKS_PATH} - Retrieve only own tasks (Admin)`, async () => {
+      expect(adminUserToken).toBeDefined();
+      const res = await request(app).get(TASKS_PATH).set("Authorization", `Bearer ${adminUserToken}`);
+      expect(res.statusCode).toBe(200);
+      expect(Array.isArray(res.body)).toBe(true);
+      res.body.forEach(task => {expect(task.userId._id.toString()).toBe(adminUserId);});
+      expect(res.body.some(task => task._id === taskByAdminId)).toBe(true);
+      expect(res.body.some(task => task._id === taskAssignedToBusinessId)).toBe(true);
+      if (taskCreatedByAdminForAssignment) {
+           const checkCreatedTask = await PostModel.findById(taskCreatedByAdminForAssignment);
+           if(checkCreatedTask) {
+              expect(res.body.some(task => task._id === taskCreatedByAdminForAssignment)).toBe(true);
+           }
+      }
+      expect(res.body.some(task => task._id === taskByIndividualId)).toBe(false);
+  });
 
     test(`PUT ${TASKS_PATH}/:id - Update task created by individual user`, async () => {
         expect(adminUserToken).toBeDefined();

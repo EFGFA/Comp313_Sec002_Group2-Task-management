@@ -70,6 +70,8 @@ export const getAllTasks = async (req, res) => {
       };
     } else if (userType === "Employee") {
       queryFilter = { assignedTo: userId };
+    } else if (userType === "Admin") {
+      queryFilter = { userId: userId };
     }
 
     let query = PostModel.find(queryFilter)
